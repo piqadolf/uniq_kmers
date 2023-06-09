@@ -1,0 +1,8 @@
+/clades
+/dumps
+/real_dumps
+/test
+**.fa**
+**.csv
+**.txt
+**.tsv
