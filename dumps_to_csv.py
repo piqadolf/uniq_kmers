@@ -3,11 +3,17 @@ def dtcsv():
     import pandas as pd
     from collections import defaultdict
 
+    def listdir_nohidden(path):
+        import os
+        for f in os.listdir(path):
+            if not f.startswith('.'):
+                yield f
+
     # creating a dictionary with k-mer counts for every cluster
     work = os.getcwd()
     if not os.path.exists('./real_dumps/'):
         os.mkdir('./real_dumps/')
-    files = os.listdir(f'{work}/real_dumps')
+    files = listdir_nohidden(f'{work}/real_dumps')
     os.chdir(f'{work}/real_dumps')
     cluster_dict = dict()
     n = 0

@@ -12,9 +12,18 @@ def kmer_uniq(path, k):
     lines = f.readlines()
     n = 0
 
+    max = 0
     for line in lines:
         if '>' in line:
-            if int(line.strip()[1:]) > 50:
+            if int(line.strip()[1:]) > max:
+                max = int(line.strip()[1:])
+    print(path)
+    print('max', max)
+    f.seek(0)
+    lines = f.readlines()
+    for line in lines:
+        if '>' in line:
+            if int(line.strip()[1:]) > max//2:
                 filtered_list.append(line.strip())
                 switch = True
             else:
@@ -39,17 +48,20 @@ def kmer_uniq(path, k):
         if '>' not in line:
             kmer = line.strip()
             kmer_names.append(line.strip())
-            clines = cluster.readlines()
-            for cline in clines:
-                rev_seq = Seq(cline.strip())
-                rev_seq = rev_seq.reverse_complement()
-                # if '>' not in cline:
-                if kmer in cline or kmer in rev_seq:
-                    n+=1
+            rev_kmer = Seq(kmer)
+            rev_kmer = rev_kmer.reverse_complement()
+            n = os.system(f"grep -e '{kmer}' -e '{rev_kmer}'../clades/{path}sta | wc -l")
+            # clines = cluster.readlines()
+            # for cline in clines:
+            #     rev_seq = Seq(cline.strip())
+            #     rev_seq = rev_seq.reverse_complement()
+            #     # if '>' not in cline:
+            #     if kmer in cline or kmer in rev_seq:
+            #         n+=1
             if m%5000 == 0:
                 print(kmer, n)
             k_list.append(n)
-            cluster.seek(0)
+            # cluster.seek(0)
     data = {'kmer':kmer_names, 'count':k_list}
     uniq_doc_list = []
     for c, v in enumerate(kmer_names):

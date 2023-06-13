@@ -1,3 +1,9 @@
+def listdir_nohidden(path):
+    import os
+    for f in os.listdir(path):
+        if not f.startswith('.'):
+            yield f
+
 def gen_dumps():
     import os
 
@@ -5,7 +11,7 @@ def gen_dumps():
     work = os.getcwd()
     if not os.path.exists('./dumps/'):
         os.mkdir('./dumps/')
-    dirs = os.listdir(work+'/dumps')
+    dirs = listdir_nohidden(work+'/dumps')
     os.chdir(work+'/dumps')
     n = 0
     for i in dirs:
